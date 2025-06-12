@@ -8,11 +8,21 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
-  "keywords": ["react", "hooks", "data-fetching", "crud", "state-management"],
+  "keywords": [
+    "react",
+    "hooks",
+    "data-fetching",
+    "crud",
+    "state-management"
+  ],
   "author": "Moses Esan",
   "license": "MIT",
   "peerDependencies": {
     "react": "^17 || ^18"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-native": "^0.72.8",
+    "typescript": "^5.8.3"
+  }
 }
