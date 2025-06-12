@@ -75,7 +75,7 @@ export interface LocalDataMutators {
 
 export interface RemoteCrudFunctions {
   insertFn?: (data: any) => Promise<any>;
-  updateFn?: (id: string | number, data: any) => Promise<void>;
+  updateFn?: (id: string | number, data: any) => Promise<any>;
   deleteFn?: (id: string | number) => Promise<void>;
 }
 

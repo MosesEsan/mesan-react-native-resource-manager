@@ -1,33 +1,14 @@
 import { useState } from 'react';
-interface LocalDataMutators {
-    addNewData?: (data: any) => void;
-    updateExistingData?: (id: string | number, data: any) => void;
-    deleteExistingData?: (id: string | number) => void;
-}
-
-export interface RemoteCrudFunctions {
-    insertFn?: (data: any) => Promise<any>;
-    updateFn?: (id: string | number, data: any) => Promise<void>;
-    deleteFn?: (id: string | number) => Promise<void>;
-}
+import { LocalDataMutators, RemoteCrudFunctions, UseMutationReturn } from './resourceManager.types';
 
 interface CrudProps {
     local: LocalDataMutators;
     remote: RemoteCrudFunctions;
 }
 
-interface useMutationReturn {
-    isAdding: boolean;
-    isUpdating: boolean;
-    isDeleting: boolean;
-    addItem: (data: any) => Promise<void>;
-    updateItem: (id: string | number, data: any) => Promise<void>;
-    deleteItem: (id: string | number) => Promise<void>;
-}
-
 export const useMutation = (
     { local, remote }: CrudProps
-): useMutationReturn => {
+): UseMutationReturn => {
     // Destructure local and remote operations
     const { addNewData, updateExistingData, deleteExistingData } = local;
     const { insertFn, updateFn, deleteFn } = remote;

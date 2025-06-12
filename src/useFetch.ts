@@ -60,10 +60,6 @@ export interface QueryActions {
   ) => Promise<void>;
   refetchData: () => Promise<void>;
   fetchNextPage: () => Promise<void>;
-  setData: (data: any[]) => void;
-  setError: (error: string | null) => void;
-  setPage: (page: number) => void;
-  setHasNextPage: (hasNextPage: boolean) => void;
 }
 
 export interface MutationActions {
@@ -133,7 +129,7 @@ export default function useFetch({
   }, []);
 
   const _setData = (incoming: any[] | ((prev: any[]) => any[])) => {
-    setData(prev =>
+    setData((prev: any[]) =>
       typeof incoming === 'function' ? incoming(prev) : incoming,
     );
     setIsFetching(false);
@@ -231,7 +227,7 @@ export default function useFetch({
     });
 
     setData(prevData => {
-      const updatedData = prevData.map(obj =>
+      const updatedData = prevData.map((obj: any) =>
         obj[matchKey] === matchId ? { ...obj, [keyToUpdate]: newValue } : obj,
       );
 

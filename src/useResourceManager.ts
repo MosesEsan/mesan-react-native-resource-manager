@@ -1,6 +1,7 @@
 // HOOKS
-import useFetch, { ServiceResponse, ExtractedData, GetDataParams, DataExtractor } from './src/useFetch';
-import { useMutation, RemoteCrudFunctions } from './useMutation';
+import { RemoteCrudFunctions, UseMutationReturn } from './resourceManager.types';
+import useFetch, { ServiceResponse, ExtractedData, GetDataParams, DataExtractor } from './useFetch';
+import { useMutation } from './useMutation';
 
 type PaginatedFetchParams = {
   serviceFn: (params: GetDataParams) => Promise<ServiceResponse>;
@@ -19,6 +20,12 @@ type PaginatedFetchParams = {
 // It also provides remote CRUD functions for adding and removing geofences
 // The actions object will be used in the ReusableScreen component to manage the screen's data and interactions
 // It will also handle the remote operations for adding and removing geofences
+type UseResourceManagerReturn = {
+  state: ReturnType<typeof useFetch>[0];
+  queries: ReturnType<typeof useFetch>[1];
+  crud: UseMutationReturn;
+};
+
 export const useResourceManager = ({
   serviceFn,
   onError,
@@ -26,7 +33,7 @@ export const useResourceManager = ({
   shouldFetch = true,
   remote = {},
   dataKey = 'data', // Default key to extract data from the response
-}: PaginatedFetchParams) => {
+}: PaginatedFetchParams): UseResourceManagerReturn => {
   // Data extractor - passed to useFetch hook
   if (!dataExtractor) {
     dataExtractor = (response: ServiceResponse): ExtractedData => {
