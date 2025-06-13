@@ -80,18 +80,75 @@ const crud = useMutation({
 
 #### `crud` object
 
-| Method                         | Description                               |
-|--------------------------------|-------------------------------------------|
-| `addItem(data, dataKey?, onSuccess?)`    | Add new item to remote/local               |
-| `updateItem(id, data, dataKey?)`         | Update item by ID                          |
-| `deleteItem(id)`                         | Delete item by ID                          |
+The `crud` object provides methods for managing local and remote data in sync.
 
-#### Flags
+| Method                              | Description                                                                 |
+|-------------------------------------|-----------------------------------------------------------------------------|
+| `addItem(data, dataKey?, onSuccess?)` | Adds a new item by calling the remote `insertFn`, then updates local state via `addNewData`. Optionally extracts data via `dataKey` and runs `onSuccess` callback with the saved item. |
+| `updateItem(id, data, dataKey?)`     | Updates an existing item via remote `updateFn`, then updates the local state using `updateExistingData`. Optionally extracts response using `dataKey`. |
+| `deleteItem(id)`                     | Deletes an item remotely via `deleteFn`, and removes it from local state via `deleteExistingData`. |
 
-- `isAdding`: `boolean`
-- `isUpdating`: `boolean`
-- `isDeleting`: `boolean`
+---
 
+### 🔍 Parameters
+
+#### `dataKey` (optional, `string`)
+Some APIs return the created or updated object wrapped inside a parent key:
+
+```json
+{
+  "status": "success",
+  "comment": {
+    "id": 1,
+    "content": "Nice!",
+    "user_id": 42
+  }
+}
+```
+
+If `dataKey = 'comment'` is passed, the `comment` object will be extracted from the response and used to update the local state.
+
+**Example:**
+
+```ts
+crud.addItem({ content: 'Nice' }, 'comment');
+```
+
+This extracts `response.comment` before adding it to local state.
+
+---
+
+#### `onSuccess` (optional, `(savedItem: any) => void`)
+A callback function executed after a successful `addItem` operation. This runs after the item is saved remotely and added locally.
+
+Use this for:
+- UI updates (scroll, animations)
+- Notifications
+- Handling returned IDs or objects
+
+**Example:**
+
+```ts
+crud.addItem(
+  { content: 'Hello world', postId: 123 },
+  'comment',
+  (savedComment) => {
+    console.log('New comment added with ID:', savedComment.id);
+  }
+);
+```
+
+---
+
+### 🔁 Return Flags
+
+These boolean flags indicate in-progress operations:
+
+| Flag         | Type     | Description                       |
+|--------------|----------|-----------------------------------|
+| `isAdding`   | `boolean`| True when `addItem` is in progress |
+| `isUpdating` | `boolean`| True when `updateItem` is in progress |
+| `isDeleting` | `boolean`| True when `deleteItem` is in progress |
 ---
 
 ## 🔗 useResourceManager
