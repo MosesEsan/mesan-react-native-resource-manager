@@ -18,7 +18,6 @@ export interface ExtractedData {
 export type DataExtractor = (response: ServiceResponse) => ExtractedData;
 
 // useFetch types
-
 export interface FetchState {
   data: any[];
   error: string | null;
@@ -28,6 +27,24 @@ export interface FetchState {
   isFetching: boolean;
   isRefreshing: boolean;
   isFetchingMore: boolean;
+}
+
+export interface FetchActions {
+  setData: (data: any[]) => void;
+  setError: (error: string | null) => void;
+  setPage: (page: number) => void;
+  setHasNextPage: (hasNextPage: boolean) => void;
+  setTotalResults: (totalResults: number | null) => void;
+  setIsFetching: (isFetching: boolean) => void;
+  setIsRefreshing: (isRefreshing: boolean) => void;
+  setIsFetchingMore: (isFetchingMore: boolean) => void;
+  fetchData: (
+    refresh?: boolean,
+    page?: number,
+    more?: boolean,
+  ) => Promise<void>;
+  refetchData: () => Promise<void>;
+  fetchNextPage: () => Promise<void>;
 }
 
 export interface FetchStateWithSetters extends FetchState {
